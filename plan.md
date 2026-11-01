@@ -8,6 +8,8 @@
     -   ```
         java -jar videoprocessor.jar inputPath outputCsv targetColor threshold
         ```
+    - make sure inputPath ends in .mp4
+- try to create FFmpegFrameGrabber with inputPath 
 - Make a new VideoProcessorHelper with a BinaryGroupFinder
 - Call a processVideo in the VideoProcessorHelper with the video file as the parameter
 
