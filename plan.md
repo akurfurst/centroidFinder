@@ -4,6 +4,10 @@
 - Contains the main for video proceessing
 
 ### public static void main(String args[])
+- Handel arguments
+    -   ```
+        java -jar videoprocessor.jar inputPath outputCsv targetColor threshold
+        ```
 - Make a new VideoProcessorHelper with a BinaryGroupFinder
 - Call a processVideo in the VideoProcessorHelper with the video file as the parameter
 
