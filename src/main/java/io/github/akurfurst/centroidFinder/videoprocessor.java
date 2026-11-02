@@ -1,5 +1,13 @@
 package io.github.akurfurst.centroidFinder;
 
+import java.io.File;
+import java.io.PrintWriter;
+import java.util.List;
+
+import javax.imageio.ImageIO;
+
+import org.bytedeco.javacv.FFmpegFrameGrabber;
+
 /**
  * The Video Processor Application.
  * 
@@ -24,5 +32,60 @@ package io.github.akurfurst.centroidFinder;
 public class videoprocessor {
     public static void main(String[] args){
 
+        FFmpegFrameGrabber inputVideo = null;
+        int targetColor = 0;
+        int threshold = 0;
+
+        String inputVideoPath = args[0];
+        String hexTargetColor = args[1];
+
+        // Input video
+        try {
+            inputVideo = new FFmpegFrameGrabber(new File(inputVideoPath));
+        } catch (Exception e) {
+            System.err.println("Error loading video: " + inputVideoPath);
+            e.printStackTrace();
+            return;
+        }
+
+        // Target Color
+        try {
+            targetColor = Integer.parseInt(hexTargetColor, 16);
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid hex target color. Please provide a color in RRGGBB format.");
+            return;
+        }
+
+        // Threshold
+        try {
+            threshold = Integer.parseInt(args[2]);
+        } catch (NumberFormatException e) {
+            System.err.println("Threshold must be an integer.");
+            return;
+        }
+
+        // Create the binarizer
+        ColorDistanceFinder distanceFinder = new EuclideanColorDistance();
+        ImageBinarizer binarizer = new DistanceImageBinarizer(distanceFinder, targetColor, threshold);
+
+        // Create the group finder
+        ImageGroupFinder groupFinder = new BinarizingImageGroupFinder(binarizer, new DfsBinaryGroupFinder());
+
+        // Create the video processor
+        videoProcessorHelper helper = new videoProcessorHelper(groupFinder);
+
+        // Get the largest centroids
+        List<LargestCentroid> largestCentroids = helper.processVideo(inputVideo);
+
+        // Create CSV named "movement.csv"
+        try (PrintWriter writer = new PrintWriter("movement.csv")) {
+            for (LargestCentroid centroid : largestCentroids) {
+                writer.println(centroid.toCsvRow());
+            }
+            System.out.println("Video summary saved as movement.csv");
+        } catch (Exception e) {
+            System.err.println("Error writing movement.csv");
+            e.printStackTrace();
+        }
     }
 }
