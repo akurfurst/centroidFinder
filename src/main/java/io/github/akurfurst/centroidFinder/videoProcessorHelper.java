@@ -8,7 +8,7 @@ import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.Java2DFrameConverter;
 
 public class videoProcessorHelper {
-    ImageGroupFinder groupFinder;
+    private final ImageGroupFinder groupFinder;
 
     public videoProcessorHelper(ImageGroupFinder groupFinder) {
         this.groupFinder = groupFinder;
