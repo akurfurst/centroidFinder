@@ -31,10 +31,10 @@ public class VideoProcessorHelper {
             BufferedImage current = converter.convert(frame);
             List<Group> currentCentroids = groupFinder.findConnectedGroups(current);
             if(currentCentroids.isEmpty()){
-                result.add(new Coordinate(-1, -1, 0), video.getTimestamp());
+                result.add(new CentroidAtTime(new Coordinate(-1, -1), video.getTimestamp()));
                 continue;
             }
-            result.add(new CentroidAtTime(currentCentroids.get(0), video.getTimestamp()));
+            result.add(new CentroidAtTime(currentCentroids.get(0).centroid(), video.getTimestamp()));
         }
         video.close();
         return result;
