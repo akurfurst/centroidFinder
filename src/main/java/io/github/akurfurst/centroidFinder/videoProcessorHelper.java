@@ -9,7 +9,8 @@ import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.Java2DFrameConverter;
 
 /**
- * This class uses an ImageGroupFinder to
+ * This class uses an ImageGroupFinder to find groups of pixels at each frame in a video.
+ * The centroid of the largest group is stored in a list and returned in the order they are found (ascending time).
  * 
  */
 public class VideoProcessorHelper {
@@ -28,7 +29,7 @@ public class VideoProcessorHelper {
      * 
      * Finds the centroid of the largest group at each frame in a video.
      * 
-     * Returned in ASCENDING order
+     * Returned in time ASCENDING order
      * 
      * @param video
      * @return a list of centroids in a video
