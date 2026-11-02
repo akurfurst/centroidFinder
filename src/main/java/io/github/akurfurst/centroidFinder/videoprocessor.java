@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.util.List;
 
 import org.bytedeco.javacv.FFmpegFrameGrabber;
+import org.bytedeco.javacv.FrameGrabber;
 
 /**
  * The Video Processor Application.
@@ -30,7 +31,7 @@ import org.bytedeco.javacv.FFmpegFrameGrabber;
 public class VideoProcessor {
     public static void main(String[] args){
 
-        FFmpegFrameGrabber inputVideo = null;
+        FrameGrabber inputVideo = null;
         int targetColor = 0;
         int threshold = 0;
 
