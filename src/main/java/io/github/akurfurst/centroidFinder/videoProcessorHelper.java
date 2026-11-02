@@ -3,8 +3,8 @@ import java.awt.image.BufferedImage;
 import java.util.List;
 import java.util.ArrayList;
 
-import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Frame;
+import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.Java2DFrameConverter;
 
 public class VideoProcessorHelper {
@@ -22,7 +22,7 @@ public class VideoProcessorHelper {
      * @param video 
      * @return a list of centroids in a video
      */
-    public List<CentroidAtTime> processVideo(FFmpegFrameGrabber video){
+    public List<CentroidAtTime> processVideo(FrameGrabber video){
         List<CentroidAtTime> result = new ArrayList<>();
         Java2DFrameConverter converter = new Java2DFrameConverter();
         Frame frame;
