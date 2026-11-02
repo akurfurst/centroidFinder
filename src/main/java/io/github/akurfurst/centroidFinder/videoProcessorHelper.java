@@ -8,7 +8,16 @@ import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.Java2DFrameConverter;
 
 public class videoProcessorHelper {
-
+    //TODO (Jam): Create a constructor that declares the groupFinder
+    
+    /**
+     * 
+     * Finds the centroid of the largest group at each frame in a video.
+     * 
+     * Returned in ASCENDING order
+     * @param video 
+     * @return a list of centroids in a video
+     */
     public List<LargestCentroid> processVideo(FFmpegFrameGrabber video, BinarizingImageGroupFinder groupFinder){
         List<LargestCentroid> result = new ArrayList<>();
         Java2DFrameConverter converter = new Java2DFrameConverter();
