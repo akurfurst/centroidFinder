@@ -29,7 +29,7 @@ import org.bytedeco.javacv.FFmpegFrameGrabber;
  *    Coordinates follow the convention: (x:0, y:0) is the top-left, with x increasing to the right and y increasing downward.
  *    Time is tracked in seconds.
  */
-public class videoprocessor {
+public class VideoProcessor {
     public static void main(String[] args){
 
         FFmpegFrameGrabber inputVideo = null;
@@ -72,7 +72,7 @@ public class videoprocessor {
         ImageGroupFinder groupFinder = new BinarizingImageGroupFinder(binarizer, new DfsBinaryGroupFinder());
 
         // Create the video processor
-        videoProcessorHelper helper = new videoProcessorHelper(groupFinder);
+        VideoProcessorHelper helper = new VideoProcessorHelper(groupFinder);
 
         // Get the largest centroids
         List<LargestCentroid> largestCentroids = helper.processVideo(inputVideo);

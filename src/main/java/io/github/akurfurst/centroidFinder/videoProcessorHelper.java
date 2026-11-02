@@ -7,10 +7,10 @@ import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.Java2DFrameConverter;
 
-public class videoProcessorHelper {
+public class VideoProcessorHelper {
     private final ImageGroupFinder groupFinder;
 
-    public videoProcessorHelper(ImageGroupFinder groupFinder) {
+    public VideoProcessorHelper(ImageGroupFinder groupFinder) {
         this.groupFinder = groupFinder;
     }
 
