@@ -22,8 +22,8 @@ public class VideoProcessorHelper {
      * @param video 
      * @return a list of centroids in a video
      */
-    public List<LargestCentroid> processVideo(FFmpegFrameGrabber video){
-        List<LargestCentroid> result = new ArrayList<>();
+    public List<CentroidAtTime> processVideo(FFmpegFrameGrabber video){
+        List<CentroidAtTime> result = new ArrayList<>();
         Java2DFrameConverter converter = new Java2DFrameConverter();
         Frame frame;
         video.start();
@@ -34,7 +34,7 @@ public class VideoProcessorHelper {
                 result.add(new Coordinate(-1, -1, 0), video.getTimestamp());
                 continue;
             }
-            result.add(new LargestCentroid(currentCentroids.get(0), video.getTimestamp()));
+            result.add(new CentroidAtTime(currentCentroids.get(0), video.getTimestamp()));
         }
         video.close();
         return result;

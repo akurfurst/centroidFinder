@@ -20,8 +20,8 @@
 ## VideoProcessorHelper.java
 - Have a BinaryGroupFinder variable
 
-### public List\<LargestCentroid> processVideo( video_file )
-- Create a list of LargestCentroids
+### public List\<CentroidAtTime> processVideo( video_file )
+- Create a list of CentroidAtTimes
 - For each Frame 
 - Convert Frame into a BufferedImage (if not already)
 - Call the BinaryGroupFinder.findConnectedGroups() on the Frame
@@ -30,17 +30,17 @@
 - Store Centroid & Time in list
 - Return the list
 
-## record LargestCentroid
+## record CentroidAtTime
 - Centroid
 - Time (seconds)
 
 ## CSVCreator.java
 
-### public void CreateCSV( List\<LargestCentroid> )
+### public void CreateCSV( List\<CentroidAtTime> )
 - Creates CSV file
     - Error checks
-- For each LargestCentroid
-- Add the LargestCentroid to the CSV
+- For each CentroidAtTime
+- Add the CentroidAtTime to the CSV
 
 
 > ## Possible Additions  
