@@ -41,6 +41,7 @@ public class VideoProcessorHelper {
         video.start();
         while ((frame = video.grab()) != null) {
             BufferedImage current = converter.convert(frame);
+            if(current == null) continue;
             List<Group> currentCentroids = groupFinder.findConnectedGroups(current);
             if (currentCentroids.isEmpty()) {
                 result.add(new CentroidAtTime(new Coordinate(-1, -1), video.getTimestamp()));
