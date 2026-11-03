@@ -74,7 +74,14 @@ public class VideoProcessor {
         VideoProcessorHelper helper = new VideoProcessorHelper(groupFinder);
 
         // Get the largest centroids
-        List<CentroidAtTime> CentroidAtTimes = helper.processVideo(inputVideo);
+        List<CentroidAtTime> CentroidAtTimes;
+        try{
+            CentroidAtTimes = helper.processVideo(inputVideo);
+        }catch(Exception e){
+            System.err.println("There was a problem processing the video: " + e);
+            return;
+        }
+        
 
         // Create CSV named "movement.csv"
         try (PrintWriter writer = new PrintWriter("movement.csv")) {

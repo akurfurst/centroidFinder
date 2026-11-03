@@ -34,7 +34,7 @@ public class VideoProcessorHelper {
      * @param video
      * @return a list of centroids in a video
      */
-    public List<CentroidAtTime> processVideo(FrameGrabber video) {
+    public List<CentroidAtTime> processVideo(FrameGrabber video) throws Exception{
         List<CentroidAtTime> result = new ArrayList<>();
         Java2DFrameConverter converter = new Java2DFrameConverter();
         Frame frame;
@@ -49,6 +49,7 @@ public class VideoProcessorHelper {
             result.add(new CentroidAtTime(currentCentroids.get(0).centroid(), video.getTimestamp()));
         }
         video.close();
+        converter.close();
         return result;
     }
 }
