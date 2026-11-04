@@ -44,13 +44,7 @@ public class VideoProcessorHelper {
         int count = 0;
 
         while ((frame = video.grab()) != null) {
-            if(count % 100 == 0){
-                if(total > 0){
-                    System.err.printf("\rFrame %d / %d (%.1f%%)", count, total, 100.0 * count / total);
-                }else{
-                    System.err.printf("\rFrame %d", count);
-                }
-            }
+            System.err.printf("\rFrame %d / %d (%.1f%%)", count, total, 100.0 * count / total);
             BufferedImage current = converter.convert(frame);
             if(current == null) continue;
             count++;
