@@ -32,6 +32,10 @@ import org.bytedeco.ffmpeg.global.avutil;
  */
 public class VideoProcessor {
     public static void main(String[] args){
+        if (args.length < 3) {
+            System.out.println("Usage: java VideoProcessor <input_image> <hex_target_color> <threshold>");
+            return;
+        }
 
         FrameGrabber inputVideo = null;
         int targetColor = 0;
