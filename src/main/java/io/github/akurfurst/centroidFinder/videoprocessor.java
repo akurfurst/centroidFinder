@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.FrameGrabber;
+import org.bytedeco.javacv.FFmpegLogCallback;
+import org.bytedeco.ffmpeg.global.avutil;
 
 /**
  * The Video Processor Application.
@@ -38,6 +40,8 @@ public class VideoProcessor {
         String inputVideoPath = args[0];
         String hexTargetColor = args[1];
 
+        //stop logs
+        FFmpegLogCallback.setLevel(avutil.AV_LOG_ERROR);
         // Input video
         try {
             inputVideo = new FFmpegFrameGrabber(new File(inputVideoPath));

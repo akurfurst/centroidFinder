@@ -39,9 +39,21 @@ public class VideoProcessorHelper {
         Java2DFrameConverter converter = new Java2DFrameConverter();
         Frame frame;
         video.start();
+
+        int total = video.getLengthInFrames();
+        int count = 0;
+
         while ((frame = video.grab()) != null) {
+            if(count % 100 == 0){
+                if(total > 0){
+                    System.err.printf("\rFrame %d / %d (%.1f%%)", count, total, 100.0 * count / total);
+                }else{
+                    System.err.printf("\rFrame %d", count);
+                }
+            }
             BufferedImage current = converter.convert(frame);
             if(current == null) continue;
+            count++;
             List<Group> currentCentroids = groupFinder.findConnectedGroups(current);
             if (currentCentroids.isEmpty()) {
                 result.add(new CentroidAtTime(new Coordinate(-1, -1), video.getTimestamp()));
@@ -49,6 +61,7 @@ public class VideoProcessorHelper {
             }
             result.add(new CentroidAtTime(currentCentroids.get(0).centroid(), video.getTimestamp()));
         }
+        System.err.println();
         video.close();
         converter.close();
         return result;
