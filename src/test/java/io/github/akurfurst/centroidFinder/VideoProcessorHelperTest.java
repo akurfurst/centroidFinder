@@ -71,15 +71,18 @@ class VideoProcessorHelperTest {
         }
     }
 
-    private static Frame blankFrame() throws Exception {
+    private static Frame blankFrame(Java2DFrameConverter converter) throws Exception {
         BufferedImage image = new BufferedImage(4, 4, BufferedImage.TYPE_3BYTE_BGR);
-        return new Java2DFrameConverter().convert(image);
+
+        return converter.convert(image);
     }
 
     @Test
     void returnsLargestCentroidWithTimestampForEachFrame() throws Exception {
-        List<Frame> frames = List.of(blankFrame(), blankFrame());
+        Java2DFrameConverter converter = new Java2DFrameConverter();
+        List<Frame> frames = List.of(blankFrame(converter), blankFrame(converter));
         FakeFrameGrabber video = new FakeFrameGrabber(frames, new long[] { 0L, 1_000_000L });
+        converter.close();
 
         FakeImageGroupFinder finder = new FakeImageGroupFinder(List.of(
             List.of(new Group(10, new Coordinate(3, 4)), new Group(2, new Coordinate(0, 0))),
@@ -97,8 +100,10 @@ class VideoProcessorHelperTest {
 
     @Test
     void recordsMinusOneCoordinatesWhenFrameHasNoGroups() throws Exception {
-        List<Frame> frames = List.of(blankFrame());
+        Java2DFrameConverter converter = new Java2DFrameConverter();
+        List<Frame> frames = List.of(blankFrame(converter));
         FakeFrameGrabber video = new FakeFrameGrabber(frames, new long[] { 2_000_000L });
+        converter.close();
 
         FakeImageGroupFinder finder = new FakeImageGroupFinder(List.of(List.of()));
 
