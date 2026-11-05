@@ -13,7 +13,7 @@ public record CentroidAtTime(Coordinate centroid, long time ) {
      * @return a CSV row string representing the time and centroid coordinates
      */
     public String toCsvRow() {
-        return String.format("%f,%d,%d", this.timeSeconds(), this.centroid().x(), this.centroid().y());
+        return String.format("%.2f,%d,%d", this.timeSeconds(), this.centroid().x(), this.centroid().y());
     }
 
     /**
@@ -22,6 +22,6 @@ public record CentroidAtTime(Coordinate centroid, long time ) {
      * @return time in second.
      */
     public double timeSeconds() {
-        return this.time() / 1_000_000L;
+        return (double) this.time() / 1_000_000L;
     }
 }
