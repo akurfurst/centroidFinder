@@ -42,7 +42,13 @@ public class VideoProcessor {
         int threshold = 0;
 
         String inputVideoPath = args[0];
-        String hexTargetColor = args[1];
+        String outputVideoPath = args[1];
+        String hexTargetColor = args[2];
+
+        if(!outputVideoPath.endsWith(".csv")){
+            System.err.println("Output path must be .csv");
+            return;
+        }
 
         //stop logs
         FFmpegLogCallback.setLevel(avutil.AV_LOG_ERROR);
@@ -65,7 +71,7 @@ public class VideoProcessor {
 
         // Threshold
         try {
-            threshold = Integer.parseInt(args[2]);
+            threshold = Integer.parseInt(args[3]);
         } catch (NumberFormatException e) {
             System.err.println("Threshold must be an integer.");
             return;
@@ -92,13 +98,13 @@ public class VideoProcessor {
         
 
         // Create CSV named "movement.csv"
-        try (PrintWriter writer = new PrintWriter("movement.csv")) {
+        try (PrintWriter writer = new PrintWriter(outputVideoPath)) {
             for (CentroidAtTime centroid : CentroidAtTimes) {
                 writer.println(centroid.toCsvRow());
             }
-            System.out.println("Video summary saved as movement.csv");
+            System.out.println("Video summary saved as " + outputVideoPath);
         } catch (Exception e) {
-            System.err.println("Error writing movement.csv");
+            System.err.println("Error writing " + outputVideoPath);
             e.printStackTrace();
         }
     }
