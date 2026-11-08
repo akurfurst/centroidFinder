@@ -183,6 +183,14 @@ Check whether the job is still running, has completed, or failed.
 
 ##  Routes
  - router.get("api/videos", getVideos);
- - 
+ - router.post(`process/${filename}`, processVideo);
 ## Controller
 - getVideos: 
+    - Loop through videos file in sever/videos and return JSON list of video names
+- processVideo:
+    - create job id
+    - insert job id and status into db
+    - Call videoproessor.jar with params
+        - once done insert into metadata table for the job id with status done or error
+    - keep querying db until status is "done"
+    - return jobid
