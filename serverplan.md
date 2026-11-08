@@ -183,7 +183,9 @@ Check whether the job is still running, has completed, or failed.
 
 ##  Routes
  - router.get("api/videos", getVideos);
- - router.post(`process/${filename}`, processVideo);
+ - router.post("process/{filename}", processVideo);
+ - router.get("process/{jobid}/status", getJob);
+ - router.get("thumbnail/{filename}", getThumbnail)
 ## Controller
 - getVideos: 
     - Loop through videos file in sever/videos and return JSON list of video names
