@@ -176,3 +176,13 @@ Check whether the job is still running, has completed, or failed.
     "error": "Error fetching job status"
   }
   ```
+
+  ---
+  ---
+# Server
+
+##  Routes
+ - router.get("api/videos", getVideos);
+ - 
+## Controller
+- getVideos: 
