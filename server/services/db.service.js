@@ -18,11 +18,23 @@ createStatement.run();
 
 // Prepare statements
 const getStatusStatement = db.prepare("SELECT status FROM jobs WHERE id = ?");
+const getJobStatement = db.prepare("SELECT * FROM jobs WHERE id = ?");
 const selectAllStatement = db.prepare("SELECT * FROM jobs");
 const addJobStatement = db.prepare("INSERT INTO jobs (id, threshold, target_color, input_path, status) VALUES (?, ?, ?, ?, ?)")
 const clearStatement = db.prepare("DROP TABLE IF EXISTS jobs");
 
 // Exported functions
+
+/**
+ * Finds the status of a job from its UUID.
+ * Returns undefined if no job found.
+ * 
+ * @param id the UUID of the job. 
+ * @returns the status of the job
+ */
+export function findJobStatus(id) {
+    return getStatusStatement.get(id);
+}
 
 /**
  * Finds a job from its UUID.
@@ -32,7 +44,7 @@ const clearStatement = db.prepare("DROP TABLE IF EXISTS jobs");
  * @returns the job metadata.
  */
 export function findJob(id) {
-    return getStatusStatement.get(id);
+    return getJobStatement.get(id);
 }
 
 /**
