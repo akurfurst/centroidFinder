@@ -186,9 +186,12 @@ The database will be handled using better-sqlite3.
 
 ### Schema
 jobs
-- jobId (Primary Key)
-- status
-- 
+- id TEXT PRIMARY KEY
+- status TEXT
+- threshold INT
+- target_color TEXT
+- input_path TEXT
+- output_path TEXT
 
 ##  Routes
  - router.get("api/videos", getVideos);
@@ -209,6 +212,6 @@ Each controller will be separated into its own file.
     - Return jobId
 - getJob:
     - Query database
-      - "SELECT status FROM jobs WHERE jobId = ?", (jobId)
+      - "SELECT status FROM jobs WHERE id = ?", (jobId)
 - getThumbnail:
     - ???
