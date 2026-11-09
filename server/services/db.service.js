@@ -1,7 +1,7 @@
 import Database from 'better-sqlite3';
 
 // Referenced to database file
-const db = new Database("database/jobs.db");
+const db = new Database("jobs.db");
 
 // Ensure database is created.
 const createStatement = db.prepare(`CREATE TABLE IF NOT EXISTS jobs (

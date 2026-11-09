@@ -1,2 +1,5 @@
-database
+# Package Manager 
 node_modules
+
+# Database
+jobs.db
