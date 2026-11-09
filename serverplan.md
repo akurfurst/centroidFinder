@@ -181,18 +181,34 @@ Check whether the job is still running, has completed, or failed.
   ---
 # Server
 
+## Database
+The database will be handled using better-sqlite3.
+
+### Schema
+jobs
+- jobId (Primary Key)
+- status
+- 
+
 ##  Routes
  - router.get("api/videos", getVideos);
  - router.post("process/{filename}", processVideo);
- - router.get("process/{jobid}/status", getJob);
+ - router.get("process/{jobid}/status", getJobStatus);
  - router.get("thumbnail/{filename}", getThumbnail)
-## Controller
+## Controllers
+Each controller will be separated into its own file.
+
 - getVideos: 
     - Loop through videos file in sever/videos and return JSON list of video names
 - processVideo:
-    - create job id
-    - insert job id and status into db
-    - Call videoproessor.jar with params
-        - once done insert into metadata table for the job id with status done or error
-    - keep querying db until status is "done"
-    - return jobid
+    - Create jobId
+    - Insert jobId and status into database
+    - Call videoprocessor.jar with params
+      - Once done insert into metadata table for the jobId with status "done" or "error"
+    - Keep querying database until status is "done"
+    - Return jobId
+- getJob:
+    - Query database
+      - "SELECT status FROM jobs WHERE jobId = ?", (jobId)
+- getThumbnail:
+    - ???
