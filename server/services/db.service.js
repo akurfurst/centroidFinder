@@ -21,6 +21,7 @@ const getJobStatement = db.prepare("SELECT * FROM jobs WHERE id = ?");
 const selectAllStatement = db.prepare("SELECT * FROM jobs");
 const addJobStatement = db.prepare("INSERT INTO jobs (id, threshold, target_color, input_path, status) VALUES (?, ?, ?, ?, ?)")
 const clearStatement = db.prepare("DROP TABLE IF EXISTS jobs");
+const updateStatusStatement = db.prepare("UPDATE jobs SET status = ? WHERE id = ?");
 
 // Exported functions
 
@@ -61,8 +62,8 @@ export function findAllJobs() {
  * @param jobMetadata the metadata of the new job 
  * @returns 
  */
-export function addJob({ id, threshold, targetColor, inputPath }) {
-    return addJobStatement.run(id, threshold, targetColor, inputPath, "processing");
+export function addJob({ id, threshold, targetColor, inputPath, status }) {
+    return addJobStatement.run(id, threshold, targetColor, inputPath, status);
 }
 
 /**
@@ -71,4 +72,15 @@ export function addJob({ id, threshold, targetColor, inputPath }) {
 export function clearJobs() {
     clearStatement.run();
     createStatement.run();
+}
+
+/**
+ * Updates the given id's status
+ * 
+ * @param id  The id to update
+ * @param status The status to update
+ * @returns 
+ */
+export function updateJobStatus(id, status) {
+    return updateStatusStatement.run(status, id);
 }
