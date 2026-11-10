@@ -30,4 +30,5 @@ movement.csv
 
 # Maven output files
 /target
+/processor/target
 
