@@ -1,5 +1,6 @@
 import { v4 as generateUUID } from 'uuid';
-import { addJob, findJob } from '../services/db.service.js';
+import { addJob, findJob, updateJobStatus } from '../services/db.service.js';
+import {spawn} from 'child_process';
 
 /**
  * Runs a video through the video processor, 
@@ -26,11 +27,9 @@ export default function processVideo(req, res) {
         id: jobId,
         targetColor,
         threshold,
-        inputPath
+        inputPath,
+        status: "processing"
     }
-
-    // Run jar with job metadata
-    // TODO: Run jar
 
     // Insert into database if successful
     try {
@@ -38,6 +37,15 @@ export default function processVideo(req, res) {
     } catch (e) {
         console.error(`Database Error: ${e}`);
     }
+
+    // Run jar with job metadata
+    // TODO: Run jar
+    console.log("Starting");
+    const jar = spawn("java", ["-jar", "../processor/target/videoprocessor.jar", `videos/${inputPath}`, "test.csv", targetColor, threshold], {stdio: "inherit"});
+
+    jar.on("error", () => updateJobStatus(jobId, "error"));
+    jar.on("close", (code) => updateJobStatus(jobId, code === 0 ? "done" : "error"));
+    
 
     // Send jobId back in accepted response
     res.status(202).send({ jobId })
