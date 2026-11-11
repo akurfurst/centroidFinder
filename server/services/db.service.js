@@ -9,8 +9,7 @@ const createStatement = db.prepare(`CREATE TABLE IF NOT EXISTS jobs (
         status TEXT,
         threshold INT,
         target_color TEXT,
-        input_path TEXT,
-        output_path TEXT
+        input_path TEXT
     )`
 );
 createStatement.run();
