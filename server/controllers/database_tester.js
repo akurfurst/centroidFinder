@@ -1,7 +1,7 @@
 // This file is designed to test the database.
 
 import { v4 as generateUUID } from 'uuid';
-import { addJob, clearJobs, findAllJobs } from "../services/db.service.js";
+import { addJob, clearJobs, findAllJobs, findJob, updateJobStatus } from "../services/db.service.js";
 
 /**
  * Returns all the jobs in the database. 
@@ -20,25 +20,50 @@ export function getDatabase(req, res) {
 }
 
 /**
- * Adds a generic job to the database.
+ * Adds a job with the specific id to the database.
  * 201 - Success
  * 500 - Failure
  */
 export function addToDatabase(req, res) {
-    const jobMetadataExample = {
-        id: generateUUID(),
+    const id = req.query.id;
+    const jobMetadata = {
+        id,
         threshold: 1, 
         targetColor: "FFFFFF",
         inputPath: "tmp/path"
     }
 
     try {
-        addJob(jobMetadataExample)
-        res.status(201).send();
+        addJob(jobMetadata)
+        return res.status(201).send({ jobId: jobMetadata.id });
     } catch (e) {
         console.error(e);
-        res.status(500).send({ error: "Database error" });
+        return res.status(500).send({ error: "Database error" });
     }
+}
+
+/**
+ * Updates a job with a new status
+ * 400 - jobId or status was not provided in query
+ * 404 - job does not exist
+ * 201 - updated job with new status
+ * 
+ * There is NO check on whether the status is valid.
+ */
+export function updateDatabase(req, res) {
+    const jobId = req.query.jobId;
+    const newStatus = req.query.status;
+    if (jobId == null || newStatus == null) return res.status(400).send({ message: "Missing jobId or new status"})
+
+    try {
+        if (findJob(jobId) === undefined) return res.status(404).send({ message: "Job not found" });
+        updateJobStatus(jobId, newStatus);
+        return res.status(201).send({ message: `Updated ${jobId}`, newStatus });
+    } catch (e) {
+        console.error(`Database Error: ${e}`);
+    }
+
+    return res.status(500);
 }
 
 /**
@@ -49,9 +74,9 @@ export function addToDatabase(req, res) {
 export function resetDatabase(req, res) {
     try {
         clearJobs()
-        res.status(200).send();
+        return res.status(200).send({ message: "Database reset" });
     } catch (e) {
         console.error(e);
-        res.status(500).send({ error: "Database error" });
+        return res.status(500).send({ error: "Database error" });
     }
 }
