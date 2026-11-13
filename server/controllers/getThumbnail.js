@@ -1,10 +1,21 @@
+import ffmpeg from "ffmpeg";
+import fs from "node:fs/promises";
 
 export default async function getThumbnail(req, res){
-    const path = req.params;
+    try{
+        const path = req.params.filename;
 
-    if(path.endsWith(".mp4")){
-        return res.status(400).json({error: "Not a video file"});
+        console.log(path);
+        const video = await ffmpeg(`./videos/${path}`);
+        const thumbnail = await video.fnExtractFrameToJPG("./thumbnails", {
+            number: 1,
+            file_name: `${path}-thumbnail`
+        })
+
+        const jpegBuffer = await fs.readFile(thumbnail[0]);
+
+        return res.status(200).type("image/jpeg").send(jpegBuffer);
+    }catch(e){
+        res.status(500).json({error: "rror generating thumbnail"})
     }
-
-    
 }
