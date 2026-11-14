@@ -16,6 +16,6 @@ export default async function getThumbnail(req, res){
 
         return res.status(200).type("image/jpeg").send(jpegBuffer);
     }catch(e){
-        res.status(500).json({error: "rror generating thumbnail"})
+        res.status(500).json({error: "Error generating thumbnail"})
     }
 }
