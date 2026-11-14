@@ -1,3 +1,4 @@
+import { existsSync } from 'fs';
 import { v4 as generateUUID } from 'uuid';
 import { addJob, findJob, updateJobStatus } from '../services/db.service.js';
 import {spawn} from 'child_process';
@@ -42,7 +43,11 @@ export default function processVideo(req, res) {
     // TODO: Run jar
     console.log("Starting");
     const jar = spawn("java", ["-jar", "../processor/target/videoprocessor.jar", `videos/${inputPath}`, `public/results/${jobId}.csv`, targetColor, threshold], { stdio: "inherit" });
-    
+
+    jar.on("close", () => {
+        const fileMadeSuccess = (existsSync(`public/results/${jobId}.csv`));
+        updateJobStatus(jobId, fileMadeSuccess ? "done" : "error");
+    });
 
     // Send jobId back in accepted response
     res.status(202).send({ jobId })
