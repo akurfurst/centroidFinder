@@ -1,5 +1,10 @@
 import ffmpeg from "ffmpeg";
+import ffmpegPath from "ffmpeg-static";
+import ffprobePath from "ffprobe-static";
 import fs from "node:fs/promises";
+
+ffmpeg.bin = ffmpegPath;
+ffmpeg.ffprobeBin = ffprobePath.path;
 
 export default async function getThumbnail(req, res){
     try{
