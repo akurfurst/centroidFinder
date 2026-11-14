@@ -5,6 +5,8 @@ import testRouter from './routes/test.routes.js';
 const PORT = 4002;
 const app = express();
 
+app.use(express.static('public'));
+
 app.use(appRouter);
 app.use("/test", testRouter);
 
