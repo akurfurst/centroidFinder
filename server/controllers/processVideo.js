@@ -41,7 +41,7 @@ export default function processVideo(req, res) {
     // Run jar with job metadata
     // TODO: Run jar
     console.log("Starting");
-    const jar = spawn("java", ["-jar", "../processor/target/videoprocessor.jar", `videos/${inputPath}`, "test.csv", targetColor, threshold], {stdio: "inherit"});
+    const jar = spawn("java", ["-jar", "../processor/target/videoprocessor.jar", `videos/${inputPath}`, `results/${jobId}.csv`, targetColor, threshold], {stdio: "inherit"});
 
     jar.on("error", () => updateJobStatus(jobId, "error"));
     jar.on("close", (code) => updateJobStatus(jobId, code === 0 ? "done" : "error"));
