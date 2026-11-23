@@ -23,6 +23,6 @@
   },
   "allowScripts": {
     "better-sqlite3": false,
-    "ffmpeg-static": false
+    "ffmpeg-static": true
   }
 }
