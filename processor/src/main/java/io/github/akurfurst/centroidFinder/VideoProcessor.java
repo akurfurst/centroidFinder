@@ -30,12 +30,18 @@ import org.bytedeco.ffmpeg.global.avutil;
  * 5. Writes a CSV file named "movement.csv" containing one row per largest group in the format "time,x,y".
  *    Coordinates follow the convention: (x:0, y:0) is the top-left, with x increasing to the right and y increasing downward.
  *    Time is tracked in seconds.
+ * 
+ * Exit codes:
+ * 0 - Success
+ * 1 - Invalid arguments
+ * 2 - Processing error
+ * 3 - CSV Writing Error
  */
 public class VideoProcessor {
     public static void main(String[] args){
         if (args.length < 4) {
             System.out.println("Usage: java VideoProcessor <input_image> <output_path> <hex_target_color> <threshold>");
-            return;
+            System.exit(1);
         }
 
         FrameGrabber inputVideo = null;
@@ -48,7 +54,7 @@ public class VideoProcessor {
 
         if(!outputVideoPath.endsWith(".csv")){
             System.err.println("Output path must be .csv");
-            return;
+            System.exit(1);
         }
 
         //stop logs
@@ -59,7 +65,8 @@ public class VideoProcessor {
         } catch (Exception e) {
             System.err.println("Error loading video: " + inputVideoPath);
             e.printStackTrace();
-            return;
+            // TODO: Specify exceptions
+            System.exit(1);
         }
 
         // Target Color
@@ -67,7 +74,7 @@ public class VideoProcessor {
             targetColor = Integer.parseInt(hexTargetColor, 16);
         } catch (NumberFormatException e) {
             System.err.println("Invalid hex target color. Please provide a color in RRGGBB format.");
-            return;
+            System.exit(1);
         }
 
         // Threshold
@@ -75,7 +82,7 @@ public class VideoProcessor {
             threshold = Integer.parseInt(args[3]);
         } catch (NumberFormatException e) {
             System.err.println("Threshold must be an integer.");
-            return;
+            System.exit(1);
         }
 
         // Create the binarizer
@@ -94,7 +101,7 @@ public class VideoProcessor {
             CentroidAtTimes = helper.processVideo(inputVideo);
         }catch(Exception e){
             System.err.println("There was a problem processing the video: " + e);
-            return;
+            System.exit(2);
         }
         
 
@@ -106,7 +113,7 @@ public class VideoProcessor {
             System.out.println("Video summary saved as " + outputVideoPath);
         } catch (Exception e) {
             System.err.println("Error writing " + outputVideoPath);
-            e.printStackTrace();
+            System.exit(3);
         }
     }
 }
