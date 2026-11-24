@@ -65,7 +65,7 @@ public class VideoProcessor {
         } catch (Exception e) {
             System.err.println("Error loading video: " + inputVideoPath);
             e.printStackTrace();
-            // TODO: Specify exceptions
+            // If the file cannot be opened, or it is not found, then the user input an invalid path
             System.exit(1);
         }
 
