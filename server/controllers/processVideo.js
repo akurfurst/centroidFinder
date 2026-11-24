@@ -44,9 +44,13 @@ export default function processVideo(req, res) {
     console.log("Starting");
     const jar = spawn("java", ["-jar", "../processor/target/videoprocessor.jar", `videos/${inputPath}`, `public/results/${jobId}.csv`, targetColor, threshold], { stdio: "inherit" });
 
-    jar.on("close", () => {
-        const fileMadeSuccess = (existsSync(`public/results/${jobId}.csv`));
-        updateJobStatus(jobId, fileMadeSuccess ? "done" : "error");
+    jar.on("close", (code) => {
+        if (code !== 0) {
+            console.log("Failed to process video, exit code: ", code);
+            updateJobStatus(jobId, "error");
+        } else {
+            updateJobStatus(jobId, "done");
+        }
     });
 
     // Send jobId back in accepted response
