@@ -113,4 +113,6 @@ class VideoProcessorHelperTest {
         assertEquals(1, result.size());
         assertEquals(new CentroidAtTime(new Coordinate(-1, -1), 2_000_000L), result.get(0));
     }
+
+    
 }
