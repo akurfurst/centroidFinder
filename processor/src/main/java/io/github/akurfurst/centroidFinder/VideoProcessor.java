@@ -96,7 +96,7 @@ public class VideoProcessor {
         VideoProcessorHelper helper = new VideoProcessorHelper(groupFinder);
 
         // Get the largest centroids
-        List<CentroidAtTime> CentroidAtTimes;
+        List<CentroidAtTime> CentroidAtTimes = null;
         try{
             CentroidAtTimes = helper.processVideo(inputVideo);
         }catch(Exception e){
