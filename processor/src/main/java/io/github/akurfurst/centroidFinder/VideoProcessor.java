@@ -14,8 +14,9 @@ import org.bytedeco.ffmpeg.global.avutil;
  * 
  * This application takes three command-line arguments:
  * 1. The path to an input video file (for example, "video.mp4").
- * 2. A target hex color in the format RRGGBB (for example, "FF0000" for red).
- * 3. An integer threshold for binarization.
+ * 2. The output path of the csv
+ * 3. A target hex color in the format RRGGBB (for example, "FF0000" for red).
+ * 4. An integer threshold for binarization.
  * 
  * The application performs the following steps:
  * 
@@ -32,8 +33,8 @@ import org.bytedeco.ffmpeg.global.avutil;
  */
 public class VideoProcessor {
     public static void main(String[] args){
-        if (args.length < 3) {
-            System.out.println("Usage: java VideoProcessor <input_image> <hex_target_color> <threshold>");
+        if (args.length < 4) {
+            System.out.println("Usage: java VideoProcessor <input_image> <output_path> <hex_target_color> <threshold>");
             return;
         }
 
