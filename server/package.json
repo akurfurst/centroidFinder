@@ -20,5 +20,9 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.11"
+  },
+  "allowScripts": {
+    "better-sqlite3": false,
+    "ffmpeg-static": true
   }
 }
