@@ -3,14 +3,18 @@ package io.github.akurfurst.centroidFinder;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.image.BufferedImage;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+import org.bytedeco.javacv.FFmpegFrameGrabber;
 import org.bytedeco.javacv.Frame;
 import org.bytedeco.javacv.FrameGrabber;
 import org.bytedeco.javacv.Java2DFrameConverter;
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.Test;
 
 class VideoProcessorHelperTest {
@@ -113,4 +117,30 @@ class VideoProcessorHelperTest {
         assertEquals(1, result.size());
         assertEquals(new CentroidAtTime(new Coordinate(-1, -1), 2_000_000L), result.get(0));
     }
+
+    @Test
+    void processesMovingCentroidVideo() throws Exception {
+        String videoPath = "sampleInput/moving-centroid.mp4";
+        
+        FFmpegFrameGrabber frameGrabber = new FFmpegFrameGrabber(videoPath);
+
+        ColorDistanceFinder distanceFinder = new EuclideanColorDistance();
+        ImageBinarizer binarizer = new DistanceImageBinarizer(distanceFinder, 0xFDA203, 30);
+        ImageGroupFinder groupFinder = new BinarizingImageGroupFinder(binarizer, new DfsBinaryGroupFinder());
+        
+        VideoProcessorHelper helper = new VideoProcessorHelper(groupFinder);
+        List<CentroidAtTime> result = helper.processVideo(frameGrabber);
+        
+        List<CentroidAtTime> expected = List.of(
+            new CentroidAtTime(new Coordinate(40, 60), 0L),
+            new CentroidAtTime(new Coordinate(100, 90), 1_000_000L),
+            new CentroidAtTime(new Coordinate(-1, -1), 2_000_000L),
+            new CentroidAtTime(new Coordinate(220, 120), 3_000_000L),
+            new CentroidAtTime(new Coordinate(270, 180), 4_000_000L)
+        );
+
+        assertEquals(expected.size(), result.size(), "Should have 5 centroids (one per frame)");
+        assertEquals(expected, result);
+        
+    }    
 }
