@@ -14,8 +14,9 @@ import org.bytedeco.ffmpeg.global.avutil;
  * 
  * This application takes three command-line arguments:
  * 1. The path to an input video file (for example, "video.mp4").
- * 2. A target hex color in the format RRGGBB (for example, "FF0000" for red).
- * 3. An integer threshold for binarization.
+ * 2. The output path of the csv
+ * 3. A target hex color in the format RRGGBB (for example, "FF0000" for red).
+ * 4. An integer threshold for binarization.
  * 
  * The application performs the following steps:
  * 
@@ -29,12 +30,18 @@ import org.bytedeco.ffmpeg.global.avutil;
  * 5. Writes a CSV file named "movement.csv" containing one row per largest group in the format "time,x,y".
  *    Coordinates follow the convention: (x:0, y:0) is the top-left, with x increasing to the right and y increasing downward.
  *    Time is tracked in seconds.
+ * 
+ * Exit codes:
+ * 0 - Success
+ * 1 - Invalid arguments
+ * 2 - Processing error
+ * 3 - CSV Writing Error
  */
 public class VideoProcessor {
     public static void main(String[] args){
-        if (args.length < 3) {
-            System.out.println("Usage: java VideoProcessor <input_image> <hex_target_color> <threshold>");
-            return;
+        if (args.length < 4) {
+            System.out.println("Usage: java VideoProcessor <input_image> <output_path> <hex_target_color> <threshold>");
+            System.exit(1);
         }
 
         FrameGrabber inputVideo = null;
@@ -47,7 +54,7 @@ public class VideoProcessor {
 
         if(!outputVideoPath.endsWith(".csv")){
             System.err.println("Output path must be .csv");
-            return;
+            System.exit(1);
         }
 
         //stop logs
@@ -58,7 +65,8 @@ public class VideoProcessor {
         } catch (Exception e) {
             System.err.println("Error loading video: " + inputVideoPath);
             e.printStackTrace();
-            return;
+            // If the file cannot be opened, or it is not found, then the user input an invalid path
+            System.exit(1);
         }
 
         // Target Color
@@ -66,7 +74,7 @@ public class VideoProcessor {
             targetColor = Integer.parseInt(hexTargetColor, 16);
         } catch (NumberFormatException e) {
             System.err.println("Invalid hex target color. Please provide a color in RRGGBB format.");
-            return;
+            System.exit(1);
         }
 
         // Threshold
@@ -74,7 +82,7 @@ public class VideoProcessor {
             threshold = Integer.parseInt(args[3]);
         } catch (NumberFormatException e) {
             System.err.println("Threshold must be an integer.");
-            return;
+            System.exit(1);
         }
 
         // Create the binarizer
@@ -88,12 +96,12 @@ public class VideoProcessor {
         VideoProcessorHelper helper = new VideoProcessorHelper(groupFinder);
 
         // Get the largest centroids
-        List<CentroidAtTime> CentroidAtTimes;
+        List<CentroidAtTime> CentroidAtTimes = null;
         try{
             CentroidAtTimes = helper.processVideo(inputVideo);
         }catch(Exception e){
             System.err.println("There was a problem processing the video: " + e);
-            return;
+            System.exit(2);
         }
         
 
@@ -105,7 +113,7 @@ public class VideoProcessor {
             System.out.println("Video summary saved as " + outputVideoPath);
         } catch (Exception e) {
             System.err.println("Error writing " + outputVideoPath);
-            e.printStackTrace();
+            System.exit(3);
         }
     }
 }
